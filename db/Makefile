@@ -1,7 +1,7 @@
 CC=g++
-CFLAGS=-std=c++11 -c -g -Wall -fgnu-tm
+CFLAGS=-std=c++11 -c -g -Wall# -fgnu-tm
 INCLUDES=-I../
-SOURCES=$(wildcard *.cc)
+SOURCES=$(wildcard leveldb_db.cc db_factory.cc)
 OBJECTS=$(SOURCES:.cc=.o)
 
 all: $(SOURCES) $(OBJECTS)

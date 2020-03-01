@@ -1,7 +1,7 @@
 #/bin/bash
 
 workload="./workloads/workloada.spec"
-dbpath="/home/lzw/ceshi2"
+dbpath="leveldb_test"
 
 
 if [ -n "$dbpath" ];then

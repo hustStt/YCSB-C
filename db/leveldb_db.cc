@@ -18,6 +18,7 @@ namespace ycsbc {
         SetOptions(&options, props);
 
 #ifndef NOVELSM
+        std::cout<<dbfilename<<endl;
         leveldb::Status s = leveldb::DB::Open(options, dbfilename, &db_);
 
 #else   //novelsm
@@ -55,15 +56,16 @@ namespace ycsbc {
     int LevelDB::Read(const std::string &table, const std::string &key, const std::vector<std::string> *fields,
                       std::vector<KVPair> &result) {
         string value;
+        printf("read:key:%lu-%s\n",key.size(),key.data());
         leveldb::Status s = db_->Get(leveldb::ReadOptions(),key,&value);
-        //printf("read:key:%lu-%s [%lu]\n",key.size(),key.data(),value.size());
+        printf("read:key:%lu-%s [%lu]\n",key.size(),key.data(),value.size());
         if(s.ok()) {
-            //printf("value:%lu\n",value.size());
+            printf("value:%lu\n",value.size());
             DeSerializeValues(value, result);
-            /* printf("get:key:%lu-%s\n",key.size(),key.data());
+            printf("get:key:%lu-%s\n",key.size(),key.data());
             for( auto kv : result) {
                 printf("get field:key:%lu-%s value:%lu-%s\n",kv.first.size(),kv.first.data(),kv.second.size(),kv.second.data());
-            } */
+            }
             return DB::kOK;
         }
         if(s.IsNotFound()){
@@ -97,10 +99,10 @@ namespace ycsbc {
         leveldb::Status s;
         string value;
         SerializeValues(values,value);
-        //printf("put:key:%lu-%s [%lu]\n",key.size(),key.data(),value.size());
-        /* for( auto kv : values) {
+        printf("put:key:%lu-%s [%lu]\n",key.size(),key.data(),value.size());
+        for( auto kv : values) {
             printf("put field:key:%lu-%s value:%lu-%s\n",kv.first.size(),kv.first.data(),kv.second.size(),kv.second.data());
-        } */ 
+        } 
         
         s = db_->Put(leveldb::WriteOptions(), key, value);
         if(!s.ok()){
@@ -133,7 +135,7 @@ namespace ycsbc {
     }
 
     bool LevelDB::HaveBalancedDistribution() {
-        return db_->HaveBalancedDistribution();
+        return DB::HaveBalancedDistribution();
     }
 
     LevelDB::~LevelDB() {
